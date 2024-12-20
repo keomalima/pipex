@@ -6,40 +6,47 @@
 /*   By: keomalima <keomalima@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 11:15:08 by kricci-d          #+#    #+#             */
-/*   Updated: 2024/12/20 13:23:44 by keomalima        ###   ########.fr       */
+/*   Updated: 2024/12/20 14:43:14 by keomalima        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	access_check(char **av, t_filed *file)
+int	redirect_fd(t_filed *file)
 {
-	int	access_write;
-
-	access_write = access(av[4], W_OK);
-	file->fd = open(av[1], O_RDONLY);
-	if (!file->fd || access_write == -1)
+	if (dup2(file->fd_in, 0) < 0 || dup2(file->fd_out, 1) < 0)
 	{
-		if (!file->fd)
-			ft_printf("%s: %s\n"RESET, strerror(errno), av[1]);
-		else
-			ft_printf("%s: %s\n"RESET, strerror(errno), av[4]);
-		if (file->fd != -1)
-			close(file->fd);
+		close(file->fd_in);
+		close(file->fd_out);
 		return (1);
 	}
-	file->infile = av[1];
-	file->first_cmd = av[2];
-	file->second_cmd = av[3];
-	file->outfile = av[4];
+	close(file->fd_in);
+	close(file->fd_out);
+	return (0);
+}
+
+int	access_check(char **av, t_filed *file)
+{
+	file->fd_in = open(av[1], O_RDONLY);
+	if (file->fd_in < 0)
+		ft_printf(RED"%s: %s\n"RESET, strerror(errno), av[1]);
+	file->fd_out = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (file->fd_out < 0)
+	{
+		ft_printf(RED"%s: %s\n"RESET, strerror(errno), av[4]);
+		if (file->fd_in != -1)
+			close(file->fd_in);
+	}
+	if (file->fd_in < 0 || file->fd_out < 0)
+		return (1);
 	return (0);
 }
 
 int	pipex(char **av)
 {
-	t_filed	file_info;
+	t_filed	file;
 
-	if (access_check(av, &file_info) == 1)
+	if (access_check(av, &file) == 1 || redirect_fd(&file) == 1)
 		return (1);
 	return (0);
 }
