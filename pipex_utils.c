@@ -6,7 +6,7 @@
 /*   By: keomalima <keomalima@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 09:38:58 by keomalima         #+#    #+#             */
-/*   Updated: 2024/12/22 15:20:21 by keomalima        ###   ########.fr       */
+/*   Updated: 2024/12/22 15:52:08 by keomalima        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,19 +31,16 @@ void	free_split(char **arr)
 	free(arr);
 }
 
-int	access_check(t_filed *file, char **av)
+void	access_check(t_filed *file, char **av)
 {
 	file->fd_in = open(av[1], O_RDONLY);
 	if (file->fd_in < 0)
-		ft_printf(RED"%s: %s\n"RESET, strerror(errno), av[1]);
+		exit_handler(av[1]);
 	file->fd_out = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (file->fd_out < 0)
 	{
-		ft_printf(RED"%s: %s\n"RESET, strerror(errno), av[4]);
 		if (file->fd_in != -1)
 			close(file->fd_in);
+		exit_handler(av[4]);
 	}
-	if (file->fd_in < 0 || file->fd_out < 0)
-		return (1);
-	return (0);
 }

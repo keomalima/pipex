@@ -6,7 +6,7 @@
 /*   By: keomalima <keomalima@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 11:17:07 by kricci-d          #+#    #+#             */
-/*   Updated: 2024/12/22 15:21:23 by keomalima        ###   ########.fr       */
+/*   Updated: 2024/12/22 15:28:59 by keomalima        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ typedef struct s_filed
 	char	**bin_paths;
 }					t_filed;
 
-int		access_check(t_filed *file, char **av);
-int		args_parse(t_filed *file, char **av, char **env);
+void	access_check(t_filed *file, char **av);
 void	free_split(char **arr);
 void	exit_handler(const char *err_msg);
+int		args_parse(t_filed *file, char **av, char **env);
 
 #endif
