@@ -6,7 +6,7 @@
 /*   By: keomalima <keomalima@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 11:17:07 by kricci-d          #+#    #+#             */
-/*   Updated: 2024/12/20 14:31:30 by keomalima        ###   ########.fr       */
+/*   Updated: 2024/12/22 13:41:23 by keomalima        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,14 @@ typedef struct s_filed
 	int		fd_out;
 	char	*infile;
 	char	*outfile;
-	char	*first_cmd;
-	char	*second_cmd;
+	char	**first_cmds;
+	char	**second_cmds;
+	char	**bin_paths;
 }					t_filed;
+
+int		access_check(t_filed *file, char **av);
+int		args_parse(t_filed *file, char **av, char **env);
+void	free_split(char **arr);
+void	exit_handler(const char *err_msg);
 
 #endif
