@@ -1,0 +1,5 @@
+   2 2024-12-23 10:08:00 ERROR Failed to connect to database
+   1 2024-12-23 10:06:00 ERROR Network timeout
+   1 2024-12-23 10:05:00 ERROR Failed to connect to database
+   1 2024-12-23 10:03:00 ERROR Failed to load configuration file
+   1 2024-12-23 10:01:00 ERROR Failed to connect to database

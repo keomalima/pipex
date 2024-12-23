@@ -6,13 +6,13 @@
 /*   By: keomalima <keomalima@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/22 11:27:52 by keomalima         #+#    #+#             */
-/*   Updated: 2024/12/23 19:58:26 by keomalima        ###   ########.fr       */
+/*   Updated: 2024/12/23 20:59:02 by keomalima        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	find_bin_dir_paths(t_filed *file, char **env)
+void	parse_path_env(t_filed *file, char **env)
 {
 	while (*env)
 	{
@@ -28,7 +28,7 @@ void	find_bin_dir_paths(t_filed *file, char **env)
 	exit_handler("PATH env variable not found");
 }
 
-char	*find_cmd_path(t_filed *file, char *cmd_arg, char *prefixed_cmd)
+char	*get_exec_path(t_filed *file, char *cmd_arg, char *prefixed_cmd)
 {
 	char	*file_path;
 	int		i;
@@ -57,7 +57,7 @@ char	*find_cmd_path(t_filed *file, char *cmd_arg, char *prefixed_cmd)
 	return (NULL);
 }
 
-char	*prefix_cmd(t_filed *file, t_cmds *cmd)
+char	*prefix_cmd_path(t_filed *file, t_cmds *cmd)
 {
 	char	*prefixed_cmd;
 
@@ -69,7 +69,7 @@ char	*prefix_cmd(t_filed *file, t_cmds *cmd)
 		free(cmd);
 		return (NULL);
 	}
-	cmd->cmd_args[0] = find_cmd_path(file, cmd->cmd_args[0], prefixed_cmd);
+	cmd->cmd_args[0] = get_exec_path(file, cmd->cmd_args[0], prefixed_cmd);
 	if (!cmd->cmd_args[0])
 	{
 		free_split(cmd->cmd_args);
@@ -79,10 +79,9 @@ char	*prefix_cmd(t_filed *file, t_cmds *cmd)
 	return (prefixed_cmd);
 }
 
-t_cmds	*cmd_args_split(t_filed *file, char *args)
+t_cmds	*parse_cmd_args(t_filed *file, char *args)
 {
 	t_cmds	*cmd;
-	char	*prefixed_cmd;
 
 	cmd = malloc (sizeof(t_cmds) * 1);
 	if (!cmd)
@@ -97,27 +96,26 @@ t_cmds	*cmd_args_split(t_filed *file, char *args)
 		free(cmd);
 		return (NULL);
 	}
-	prefixed_cmd = prefix_cmd(file, cmd);
-	if (!prefixed_cmd)
+	if (!prefix_cmd_path(file, cmd))
 		return (NULL);
 	return (cmd);
 }
 
-int	args_parse(t_filed *file, int ac, char **av, char **env)
+int	parse_prog_args(t_filed *file, int ac, char **av, char **env)
 {
 	int	i;
 
-	find_bin_dir_paths(file, env);
+	parse_path_env(file, env);
 	file->cmds = malloc (sizeof(t_cmds *) * (ac - 3));
 	if (!file->cmds)
 		exit_handler("Failed to parse cmds");
 	i = 0;
 	while (ac - 3 > i)
 	{
-		file->cmds[i] = cmd_args_split(file, av[i + 2]);
+		file->cmds[i] = parse_cmd_args(file, av[i + 2]);
 		if (!file->cmds[i])
 		{
-			while (i-- > 0)
+			while (--i > 0)
 			{
 				free_split(file->cmds[i]->cmd_args);
 				free(file->cmds[i]);
@@ -128,5 +126,6 @@ int	args_parse(t_filed *file, int ac, char **av, char **env)
 		i++;
 	}
 	file->cmds[ac - 3] = NULL;
+	file->ac = ac - 3;
 	return (0);
 }
