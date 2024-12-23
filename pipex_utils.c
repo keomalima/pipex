@@ -6,7 +6,7 @@
 /*   By: keomalima <keomalima@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 09:38:58 by keomalima         #+#    #+#             */
-/*   Updated: 2024/12/23 15:45:17 by keomalima        ###   ########.fr       */
+/*   Updated: 2024/12/23 19:37:39 by keomalima        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,27 @@ void	exit_handler(const char *err_msg)
 	else
 		ft_printf(RED"%s\n"RESET, err_msg);
 	exit(EXIT_FAILURE);
+}
+
+void	free_cmds_memory(t_filed *file)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (file->cmds[i])
+	{
+		j = 0;
+		if (file->cmds[i]->cmd_args)
+		{
+			while (file->cmds[i]->cmd_args[j])
+				free(file->cmds[i]->cmd_args[j++]);
+			free(file->cmds[i]->cmd_args);
+		}
+		free(file->cmds[i]);
+		i++;
+	}
+	free(file->cmds);
 }
 
 void	free_split(char **arr)

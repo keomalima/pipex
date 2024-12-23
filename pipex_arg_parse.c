@@ -6,11 +6,27 @@
 /*   By: keomalima <keomalima@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/22 11:27:52 by keomalima         #+#    #+#             */
-/*   Updated: 2024/12/23 15:49:26 by keomalima        ###   ########.fr       */
+/*   Updated: 2024/12/23 19:58:26 by keomalima        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+void	find_bin_dir_paths(t_filed *file, char **env)
+{
+	while (*env)
+	{
+		if (ft_strnstr(*env, "PATH=", 5))
+		{
+			file->bin_paths = ft_split(*env + 5, ':');
+			if (!file->bin_paths)
+				exit_handler("Failed to split dir paths");
+			return ;
+		}
+		env++;
+	}
+	exit_handler("PATH env variable not found");
+}
 
 char	*find_cmd_path(t_filed *file, char *cmd_arg, char *prefixed_cmd)
 {
@@ -41,66 +57,76 @@ char	*find_cmd_path(t_filed *file, char *cmd_arg, char *prefixed_cmd)
 	return (NULL);
 }
 
-char	**cmd_args_split(t_filed *file, char *args)
+char	*prefix_cmd(t_filed *file, t_cmds *cmd)
 {
-	char	**cmd_args;
 	char	*prefixed_cmd;
 
-	cmd_args = ft_split(args, 32);
-	if (!cmd_args)
-	{
-		ft_printf("Failed to split cmd args string\n");
-		return (NULL);
-	}
-	prefixed_cmd = ft_strjoin("/", cmd_args[0]);
+	prefixed_cmd = ft_strjoin("/", cmd->cmd_args[0]);
 	if (!prefixed_cmd)
 	{
 		ft_printf("Failed to prefix the cmd\n");
-		free_split(cmd_args);
+		free_split(cmd->cmd_args);
+		free(cmd);
 		return (NULL);
 	}
-	cmd_args[0] = find_cmd_path(file, cmd_args[0], prefixed_cmd);
-	if (!cmd_args[0])
+	cmd->cmd_args[0] = find_cmd_path(file, cmd->cmd_args[0], prefixed_cmd);
+	if (!cmd->cmd_args[0])
 	{
-		free_split(cmd_args);
+		free_split(cmd->cmd_args);
+		free(cmd);
 		return (NULL);
 	}
-	return (cmd_args);
+	return (prefixed_cmd);
 }
 
-void	find_bin_dir_paths(t_filed *file, char **env)
+t_cmds	*cmd_args_split(t_filed *file, char *args)
 {
-	while (*env)
+	t_cmds	*cmd;
+	char	*prefixed_cmd;
+
+	cmd = malloc (sizeof(t_cmds) * 1);
+	if (!cmd)
 	{
-		if (ft_strnstr(*env, "PATH=", 5))
-		{
-			file->bin_paths = ft_split(*env + 5, ':');
-			if (!file->bin_paths)
-				exit_handler("Failed to split dir paths");
-			return ;
-		}
-		env++;
+		ft_printf("Failed to allocate memory for cmd\n");
+		return (NULL);
 	}
-	exit_handler("PATH env variable not found");
+	cmd->cmd_args = ft_split(args, 32);
+	if (!cmd->cmd_args)
+	{
+		ft_printf("Failed to split cmd args string\n");
+		free(cmd);
+		return (NULL);
+	}
+	prefixed_cmd = prefix_cmd(file, cmd);
+	if (!prefixed_cmd)
+		return (NULL);
+	return (cmd);
 }
 
-int	args_parse(t_filed *file, char **av, char **env)
+int	args_parse(t_filed *file, int ac, char **av, char **env)
 {
-	if (!*av[2] || !*av[3])
-	{
-		ft_printf("No arguments provided\n");
-		return (1);
-	}
+	int	i;
+
 	find_bin_dir_paths(file, env);
-	file->first_cmds = cmd_args_split(file, av[2]);
-	if (!file->first_cmds)
-		return (1);
-	file->second_cmds = cmd_args_split(file, av[3]);
-	if (!file->second_cmds)
+	file->cmds = malloc (sizeof(t_cmds *) * (ac - 3));
+	if (!file->cmds)
+		exit_handler("Failed to parse cmds");
+	i = 0;
+	while (ac - 3 > i)
 	{
-		if (file->first_cmds)
-			free_split(file->first_cmds);
-		return (1);
+		file->cmds[i] = cmd_args_split(file, av[i + 2]);
+		if (!file->cmds[i])
+		{
+			while (i-- > 0)
+			{
+				free_split(file->cmds[i]->cmd_args);
+				free(file->cmds[i]);
+			}
+			free(file->cmds);
+			return (1);
+		}
+		i++;
 	}
+	file->cmds[ac - 3] = NULL;
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: keomalima <keomalima@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 11:17:07 by kricci-d          #+#    #+#             */
-/*   Updated: 2024/12/23 15:49:50 by keomalima        ###   ########.fr       */
+/*   Updated: 2024/12/23 19:43:08 by keomalima        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,20 +30,25 @@
 # define YELLOW "\x1b[33m"
 # define BLUE "\x1b[34m"
 
+typedef struct s_cmds
+{
+	char	**cmd_args;
+}				t_cmds;
+
 typedef struct s_filed
 {
 	int		fd_in;
 	int		fd_out;
-	char	**first_cmds;
-	char	**second_cmds;
 	char	**bin_paths;
-}					t_filed;
+	t_cmds	**cmds;
+}				t_filed;
 
 void	access_check(t_filed *file, char **av);
 void	free_split(char **arr);
 void	exit_handler(const char *err_msg);
 void	close_fd(t_filed *file, int fd[2]);
-int		args_parse(t_filed *file, char **av, char **env);
+int		args_parse(t_filed *file, int ac, char **av, char **env);
 int		pipex_run(t_filed *file);
+void	free_cmds_memory(t_filed *file);
 
 #endif
