@@ -6,11 +6,23 @@
 /*   By: keomalima <keomalima@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 09:38:58 by keomalima         #+#    #+#             */
-/*   Updated: 2024/12/22 15:52:08 by keomalima        ###   ########.fr       */
+/*   Updated: 2024/12/23 15:45:17 by keomalima        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+void	close_fd(t_filed *file, int fd[2])
+{
+	if (file->fd_in)
+		close(file->fd_in);
+	if (file->fd_out)
+		close(file->fd_in);
+	if (fd[0])
+		close(fd[0]);
+	if (fd[1])
+		close(fd[1]);
+}
 
 void	exit_handler(const char *err_msg)
 {

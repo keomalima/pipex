@@ -6,7 +6,7 @@
 /*   By: keomalima <keomalima@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 11:17:07 by kricci-d          #+#    #+#             */
-/*   Updated: 2024/12/22 15:28:59 by keomalima        ###   ########.fr       */
+/*   Updated: 2024/12/23 15:49:50 by keomalima        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ typedef struct s_filed
 void	access_check(t_filed *file, char **av);
 void	free_split(char **arr);
 void	exit_handler(const char *err_msg);
+void	close_fd(t_filed *file, int fd[2]);
 int		args_parse(t_filed *file, char **av, char **env);
+int		pipex_run(t_filed *file);
 
 #endif
