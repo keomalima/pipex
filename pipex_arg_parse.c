@@ -6,7 +6,7 @@
 /*   By: keomalima <keomalima@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/22 11:27:52 by keomalima         #+#    #+#             */
-/*   Updated: 2024/12/23 20:59:02 by keomalima        ###   ########.fr       */
+/*   Updated: 2024/12/24 13:18:08 by keomalima        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ int	parse_prog_args(t_filed *file, int ac, char **av, char **env)
 	int	i;
 
 	parse_path_env(file, env);
-	file->cmds = malloc (sizeof(t_cmds *) * (ac - 3));
+	file->cmds = malloc (sizeof(t_cmds *) * (ac - 2));
 	if (!file->cmds)
 		exit_handler("Failed to parse cmds");
 	i = 0;
