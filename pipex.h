@@ -6,7 +6,7 @@
 /*   By: keomalima <keomalima@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 11:17:07 by kricci-d          #+#    #+#             */
-/*   Updated: 2024/12/23 20:58:34 by keomalima        ###   ########.fr       */
+/*   Updated: 2024/12/28 13:23:54 by keomalima        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ typedef struct s_filed
 	t_cmds	**cmds;
 }				t_filed;
 
-void	access_check(t_filed *file, char **av);
+void	access_check(t_filed *file, char **av, int ac);
 void	free_split(char **arr);
 void	exit_handler(const char *err_msg);
 void	close_fd(t_filed *file, int fd[2]);

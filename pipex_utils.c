@@ -6,7 +6,7 @@
 /*   By: keomalima <keomalima@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 09:38:58 by keomalima         #+#    #+#             */
-/*   Updated: 2024/12/23 19:37:39 by keomalima        ###   ########.fr       */
+/*   Updated: 2024/12/28 13:24:00 by keomalima        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,12 @@ void	free_split(char **arr)
 	free(arr);
 }
 
-void	access_check(t_filed *file, char **av)
+void	access_check(t_filed *file, char **av, int ac)
 {
 	file->fd_in = open(av[1], O_RDONLY);
 	if (file->fd_in < 0)
 		exit_handler(av[1]);
-	file->fd_out = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	file->fd_out = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (file->fd_out < 0)
 	{
 		if (file->fd_in != -1)

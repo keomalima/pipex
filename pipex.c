@@ -6,7 +6,7 @@
 /*   By: keomalima <keomalima@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 11:15:08 by kricci-d          #+#    #+#             */
-/*   Updated: 2024/12/24 17:02:48 by keomalima        ###   ########.fr       */
+/*   Updated: 2024/12/28 13:23:20 by keomalima        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	pipex(char **av, int ac, char **env)
 {
 	t_filed	file;
 
-	access_check(&file, av);
+	access_check(&file, av, ac);
 	if (parse_prog_args(&file, ac, av, env) == 1)
 	{
 		close(file.fd_in);
