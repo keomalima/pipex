@@ -6,7 +6,7 @@
 #    By: keomalima <keomalima@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/19 10:48:41 by kricci-d          #+#    #+#              #
-#    Updated: 2024/12/22 21:04:13 by keomalima        ###   ########.fr        #
+#    Updated: 2024/12/29 11:33:02 by keomalima        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = pipex
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
-SRCS = pipex.c pipex_utils.c pipex_arg_parse.c pipex_pipes.c
+SRCS = pipex.c pipex_utils.c pipex_arg_parse.c pipex_pipes.c pipex_pipes_utils.c
 OBJS_DIR = objects
 OBJS = $(addprefix $(OBJS_DIR)/, $(SRCS:%.c=%.o))
 

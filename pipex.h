@@ -6,7 +6,7 @@
 /*   By: keomalima <keomalima@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 11:17:07 by kricci-d          #+#    #+#             */
-/*   Updated: 2024/12/28 13:23:54 by keomalima        ###   ########.fr       */
+/*   Updated: 2024/12/29 12:03:50 by keomalima        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,5 +51,10 @@ void	close_fd(t_filed *file, int fd[2]);
 int		parse_prog_args(t_filed *file, int ac, char **av, char **env);
 int		pipex_run(t_filed *file);
 void	free_cmds_memory(t_filed *file);
+void	close_pipes_fd(t_filed *file, int (*fd)[2], int i);
+void	open_pipes(t_filed *file, int (*fd)[2]);
+void	clean_memory_and_exit(t_filed *file, char *err_msg);
+void	ft_dup2(t_filed *file, int old_fd, int new_fd);
+void	close_all_fds(t_filed *file, int (*fd)[2]);
 
 #endif
