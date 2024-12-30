@@ -1,2 +1,0 @@
-[31mInvalid argument: failed to dup22
-[0m

@@ -6,7 +6,7 @@
 /*   By: keomalima <keomalima@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 11:15:08 by kricci-d          #+#    #+#             */
-/*   Updated: 2024/12/28 13:23:20 by keomalima        ###   ########.fr       */
+/*   Updated: 2024/12/30 11:11:47 by keomalima        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,7 @@ int	pipex(char **av, int ac, char **env)
 		close(file.fd_out);
 		return (1);
 	}
-	if (pipex_run(&file) == 1)
-		return (1);
-	//
-	// int	i = 0;
-	// while (file.cmds[i])
-	// {
-	// 	int	j = 0;
-	// 	while (file.cmds[i]->cmd_args[j])
-	// 		printf("[%s] ", file.cmds[i]->cmd_args[j++]);
-	// 	printf("\n");
-	// 	i++;
-	// }
+	pipex_run_pipes(&file, env);
 	free_cmds_memory(&file);
 	free_split(file.bin_paths);
 	return (0);

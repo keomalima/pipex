@@ -6,7 +6,7 @@
 /*   By: keomalima <keomalima@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/22 11:27:52 by keomalima         #+#    #+#             */
-/*   Updated: 2024/12/24 13:18:08 by keomalima        ###   ########.fr       */
+/*   Updated: 2024/12/30 11:35:31 by keomalima        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ char	*get_exec_path(t_filed *file, char *cmd_arg, char *prefixed_cmd)
 	return (NULL);
 }
 
-char	*prefix_cmd_path(t_filed *file, t_cmds *cmd)
+char	*prefix_cmd_path(t_filed *file, t_cmd *cmd)
 {
 	char	*prefixed_cmd;
 
@@ -79,11 +79,11 @@ char	*prefix_cmd_path(t_filed *file, t_cmds *cmd)
 	return (prefixed_cmd);
 }
 
-t_cmds	*parse_cmd_args(t_filed *file, char *args)
+t_cmd	*parse_cmd_args(t_filed *file, char *args)
 {
-	t_cmds	*cmd;
+	t_cmd	*cmd;
 
-	cmd = malloc (sizeof(t_cmds) * 1);
+	cmd = malloc (sizeof(t_cmd) * 1);
 	if (!cmd)
 	{
 		ft_printf("Failed to allocate memory for cmd\n");
@@ -106,7 +106,7 @@ int	parse_prog_args(t_filed *file, int ac, char **av, char **env)
 	int	i;
 
 	parse_path_env(file, env);
-	file->cmds = malloc (sizeof(t_cmds *) * (ac - 2));
+	file->cmds = malloc (sizeof(t_cmd *) * (ac - 2));
 	if (!file->cmds)
 		exit_handler("Failed to parse cmds");
 	i = 0;
@@ -125,7 +125,7 @@ int	parse_prog_args(t_filed *file, int ac, char **av, char **env)
 		}
 		i++;
 	}
-	file->cmds[ac - 3] = NULL;
+	file->cmds[i] = NULL;
 	file->ac = ac - 3;
 	return (0);
 }

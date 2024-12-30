@@ -6,11 +6,17 @@
 /*   By: keomalima <keomalima@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/22 21:03:03 by keomalima         #+#    #+#             */
-/*   Updated: 2024/12/29 12:05:28 by keomalima        ###   ########.fr       */
+/*   Updated: 2024/12/30 11:51:04 by keomalima        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+void	ft_dup2(t_filed *file, int old_fd, int new_fd)
+{
+	if (dup2(old_fd, new_fd) == -1)
+		clean_memory_and_exit(file, "failed to dup2");
+}
 
 void	swap_pipes_fd(t_filed *file, int (*fd)[2], int i)
 {
@@ -35,13 +41,13 @@ void	swap_pipes_fd(t_filed *file, int (*fd)[2], int i)
 	close(file->fd_out);
 }
 
-int pipex_run(t_filed *file)
+void	pipex_run_pipes(t_filed *file, char **env)
 {
-	int pid[file->ac];
-	int fd[file->ac - 1][2];
-	int i;
+	int	pid[file->ac];
+	int	fd[file->ac - 1][2];
+	int	i;
 
-	open_pipes(file, fd);
+	open_pipes_fd(file, fd);
 	i = 0;
 	while (file->ac > i)
 	{
@@ -52,12 +58,12 @@ int pipex_run(t_filed *file)
 		{
 			close_pipes_fd(file, fd, i);
 			swap_pipes_fd(file, fd, i);
-			if (execve(file->cmds[i]->cmd_args[0], file->cmds[i]->cmd_args, NULL) == -1)
+			if (execve(file->cmds[i]->cmd_args[0],
+					file->cmds[i]->cmd_args, env) == -1)
 				clean_memory_and_exit(file, "failed to execve");
 		}
 		i++;
 	}
 	close_all_fds(file, fd);
-	wait(NULL);
-	return (0);
+	wait_for_children(file, i);
 }

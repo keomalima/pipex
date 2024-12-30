@@ -6,16 +6,19 @@
 /*   By: keomalima <keomalima@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 11:32:45 by keomalima         #+#    #+#             */
-/*   Updated: 2024/12/29 12:05:08 by keomalima        ###   ########.fr       */
+/*   Updated: 2024/12/30 11:15:55 by keomalima        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	ft_dup2(t_filed *file, int old_fd, int new_fd)
+void	wait_for_children(t_filed *file, int num_children)
 {
-	if (dup2(old_fd, new_fd) == 1)
-		clean_memory_and_exit(file, "failed to dup2");
+	while (num_children-- > 0)
+	{
+		if (wait(NULL) == -1)
+			clean_memory_and_exit(file, "error waiting for children");
+	}
 }
 
 void	clean_memory_and_exit(t_filed *file, char *err_msg)
@@ -40,14 +43,14 @@ void	close_all_fds(t_filed *file, int (*fd)[2])
 	close(file->fd_out);
 }
 
-void	open_pipes(t_filed *file, int (*fd)[2])
+void	open_pipes_fd(t_filed *file, int (*fd)[2])
 {
 	int	i;
 
 	i = 0;
 	while (file->ac - 1 > i)
 	{
-		if (pipe(fd[i]) == - 1)
+		if (pipe(fd[i]) == -1)
 			clean_memory_and_exit(file, "failed to create pipes");
 		i++;
 	}
