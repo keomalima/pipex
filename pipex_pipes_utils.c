@@ -6,7 +6,7 @@
 /*   By: keomalima <keomalima@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 11:32:45 by keomalima         #+#    #+#             */
-/*   Updated: 2024/12/30 13:16:50 by keomalima        ###   ########.fr       */
+/*   Updated: 2024/12/30 13:38:37 by keomalima        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,17 +79,3 @@ void	malloc_n_open_pipes_fd(t_filed *file)
 	}
 }
 
-void	close_unused_pipes_fd(t_filed *file, int i)
-{
-	int	j;
-
-	j = 0;
-	while (file->ac - 1 > j)
-	{
-		if (j != i)
-			close(file->pipe_fd[j][1]);
-		if (j != i - 1)
-			close(file->pipe_fd[j][0]);
-		j++;
-	}
-}

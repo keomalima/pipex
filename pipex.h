@@ -6,7 +6,7 @@
 /*   By: keomalima <keomalima@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 11:17:07 by kricci-d          #+#    #+#             */
-/*   Updated: 2024/12/30 13:16:58 by keomalima        ###   ########.fr       */
+/*   Updated: 2024/12/30 13:39:08 by keomalima        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ void	free_cmds_memory(t_filed *file);
 void	malloc_n_open_pipes_fd(t_filed *file);
 void	clean_memory_and_exit(t_filed *file, char *err_msg);
 void	close_all_fds(t_filed *file);
-void	close_unused_pipes_fd(t_filed *file, int i);
 void	wait_for_children(t_filed *file, int num_children);
 void	clean_memory(t_filed *file);
 

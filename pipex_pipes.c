@@ -6,7 +6,7 @@
 /*   By: keomalima <keomalima@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/22 21:03:03 by keomalima         #+#    #+#             */
-/*   Updated: 2024/12/30 13:34:14 by keomalima        ###   ########.fr       */
+/*   Updated: 2024/12/30 13:48:06 by keomalima        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	ft_dup2(t_filed *file, int old_fd, int new_fd)
 
 void	swap_pipes_fd(t_filed *file, int i)
 {
-	close_unused_pipes_fd(file, i);
 	if (i == 0)
 	{
 		ft_dup2(file, file->fd_in, STDIN_FILENO);
@@ -36,8 +35,6 @@ void	swap_pipes_fd(t_filed *file, int i)
 		ft_dup2(file, file->pipe_fd[i - 1][0], STDIN_FILENO);
 		ft_dup2(file, file->pipe_fd[i][1], STDOUT_FILENO);
 	}
-	close(file->fd_in);
-	close(file->fd_out);
 }
 
 void	pipex_run_pipes(t_filed *file, char **env)
@@ -57,6 +54,7 @@ void	pipex_run_pipes(t_filed *file, char **env)
 		if (file->pid[i] == 0)
 		{
 			swap_pipes_fd(file, i);
+			close_all_fds(file);
 			if (execve(file->cmds[i]->cmd_args[0],
 					file->cmds[i]->cmd_args, env) == -1)
 				clean_memory_and_exit(file, "failed to execve");
