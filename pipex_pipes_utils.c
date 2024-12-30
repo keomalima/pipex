@@ -6,7 +6,7 @@
 /*   By: keomalima <keomalima@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 11:32:45 by keomalima         #+#    #+#             */
-/*   Updated: 2024/12/30 11:15:55 by keomalima        ###   ########.fr       */
+/*   Updated: 2024/12/30 13:16:50 by keomalima        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,50 +23,73 @@ void	wait_for_children(t_filed *file, int num_children)
 
 void	clean_memory_and_exit(t_filed *file, char *err_msg)
 {
+	int	i;
+
+	i = 0;
+	if (file->pipe_fd)
+	{
+		while (file->ac - 1 > i)
+			free(file->pipe_fd[i++]);
+		free(file->pipe_fd);
+	}
+	if (file->pid)
+		free(file->pid);
 	free_cmds_memory(file);
 	free_split(file->bin_paths);
 	exit_handler(err_msg);
 }
 
-void	close_all_fds(t_filed *file, int (*fd)[2])
+void	close_all_fds(t_filed *file)
 {
 	int	i;
 
 	i = 0;
 	while (file->ac - 1 > i)
 	{
-		close(fd[i][0]);
-		close(fd[i][1]);
+		close(file->pipe_fd[i][0]);
+		close(file->pipe_fd[i][1]);
 		i++;
 	}
 	close(file->fd_in);
 	close(file->fd_out);
 }
 
-void	open_pipes_fd(t_filed *file, int (*fd)[2])
+void	malloc_n_open_pipes_fd(t_filed *file)
 {
 	int	i;
 
 	i = 0;
+	file->pipe_fd = NULL;
+	file->pipe_fd = malloc(sizeof(int *) * (file->ac - 1));
+	if (!file->pipe_fd)
+		clean_memory_and_exit(file, "failed to allocate memory to fd column");
 	while (file->ac - 1 > i)
 	{
-		if (pipe(fd[i]) == -1)
+		file->pipe_fd[i] = malloc (sizeof(int) * 2);
+		if (!file->pipe_fd[i])
+			clean_memory_and_exit(file, "failed to allocate memory for fd row");
+		i++;
+	}
+	i = 0;
+	while (file->ac - 1 > i)
+	{
+		if (pipe(file->pipe_fd[i]) == -1)
 			clean_memory_and_exit(file, "failed to create pipes");
 		i++;
 	}
 }
 
-void	close_pipes_fd(t_filed *file, int (*fd)[2], int i)
+void	close_unused_pipes_fd(t_filed *file, int i)
 {
 	int	j;
 
 	j = 0;
 	while (file->ac - 1 > j)
 	{
-		if (i != j)
-			close(fd[j][1]);
+		if (j != i)
+			close(file->pipe_fd[j][1]);
 		if (j != i - 1)
-			close(fd[j][0]);
+			close(file->pipe_fd[j][0]);
 		j++;
 	}
 }

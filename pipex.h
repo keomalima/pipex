@@ -6,7 +6,7 @@
 /*   By: keomalima <keomalima@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 11:17:07 by kricci-d          #+#    #+#             */
-/*   Updated: 2024/12/30 11:33:17 by keomalima        ###   ########.fr       */
+/*   Updated: 2024/12/30 13:16:58 by keomalima        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,20 +41,23 @@ typedef struct s_filed
 	int		fd_in;
 	int		fd_out;
 	int		ac;
+	int		*pid;
+	int		**pipe_fd;
 	char	**bin_paths;
 	t_cmd	**cmds;
 }				t_filed;
 
+int		parse_prog_args(t_filed *file, int ac, char **av, char **env);
 void	access_check(t_filed *file, char **av, int ac);
 void	free_split(char **arr);
 void	exit_handler(const char *err_msg);
-int		parse_prog_args(t_filed *file, int ac, char **av, char **env);
 void	pipex_run_pipes(t_filed *file, char **env);
 void	free_cmds_memory(t_filed *file);
-void	open_pipes_fd(t_filed *file, int (*fd)[2]);
+void	malloc_n_open_pipes_fd(t_filed *file);
 void	clean_memory_and_exit(t_filed *file, char *err_msg);
-void	close_all_fds(t_filed *file, int (*fd)[2]);
-void	close_pipes_fd(t_filed *file, int (*fd)[2], int i);
+void	close_all_fds(t_filed *file);
+void	close_unused_pipes_fd(t_filed *file, int i);
 void	wait_for_children(t_filed *file, int num_children);
+void	clean_memory(t_filed *file);
 
 #endif

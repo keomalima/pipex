@@ -6,18 +6,31 @@
 /*   By: keomalima <keomalima@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 09:38:58 by keomalima         #+#    #+#             */
-/*   Updated: 2024/12/30 10:37:36 by keomalima        ###   ########.fr       */
+/*   Updated: 2024/12/30 13:36:02 by keomalima        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
+void	clean_memory(t_filed *file)
+{
+	int	i;
+
+	i = 0;
+	while (file->ac - 1 > i)
+		free(file->pipe_fd[i++]);
+	free(file->pipe_fd);
+	free(file->pid);
+	free_cmds_memory(file);
+	free_split(file->bin_paths);
+}
+
 void	exit_handler(const char *err_msg)
 {
 	if (errno != 0)
-		ft_printf(RED"%s: %s\n"RESET, strerror(errno), err_msg);
+		ft_printf("%s: %s\n", strerror(errno), err_msg);
 	else
-		ft_printf(RED"%s\n"RESET, err_msg);
+		ft_printf("%s\n", err_msg);
 	exit(EXIT_FAILURE);
 }
 

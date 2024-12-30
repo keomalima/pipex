@@ -6,7 +6,7 @@
 /*   By: keomalima <keomalima@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 11:15:08 by kricci-d          #+#    #+#             */
-/*   Updated: 2024/12/30 11:11:47 by keomalima        ###   ########.fr       */
+/*   Updated: 2024/12/30 12:54:41 by keomalima        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@ int	pipex(char **av, int ac, char **env)
 		return (1);
 	}
 	pipex_run_pipes(&file, env);
-	free_cmds_memory(&file);
-	free_split(file.bin_paths);
+	clean_memory(&file);
 	return (0);
 }
 
