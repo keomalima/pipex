@@ -6,7 +6,7 @@
 /*   By: keomalima <keomalima@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/22 11:27:52 by keomalima         #+#    #+#             */
-/*   Updated: 2024/12/30 13:35:44 by keomalima        ###   ########.fr       */
+/*   Updated: 2024/12/31 11:38:28 by keomalima        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,28 +104,28 @@ t_cmd	*parse_cmd_args(t_filed *file, char *args)
 int	parse_prog_args(t_filed *file, int ac, char **av, char **env)
 {
 	int	i;
+	int	bonus_var;
 
 	parse_path_env(file, env);
-	file->cmds = malloc (sizeof(t_cmd *) * (ac - 2));
+	if (file->is_here_doc)
+		bonus_var = 1;
+	else
+		bonus_var = 0;
+	file->cmds = malloc (sizeof(t_cmd *) * (ac - 2 - bonus_var));
 	if (!file->cmds)
 		exit_handler("Failed to parse cmds");
 	i = 0;
-	while (ac - 3 > i)
+	while (ac - 3  - bonus_var > i)
 	{
-		file->cmds[i] = parse_cmd_args(file, av[i + 2]);
+		file->cmds[i] = parse_cmd_args(file, av[i + 2 + bonus_var]);
 		if (!file->cmds[i])
 		{
-			while (--i > 0)
-			{
-				free_split(file->cmds[i]->cmd_args);
-				free(file->cmds[i]);
-			}
-			free(file->cmds);
+			free_cmds_memory(file);
 			return (1);
 		}
 		i++;
 	}
 	file->cmds[i] = NULL;
-	file->ac = ac - 3;
+	file->ac = ac - 3 - bonus_var;
 	return (0);
 }

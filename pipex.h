@@ -6,7 +6,7 @@
 /*   By: keomalima <keomalima@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 11:17:07 by kricci-d          #+#    #+#             */
-/*   Updated: 2024/12/30 13:39:08 by keomalima        ###   ########.fr       */
+/*   Updated: 2024/12/31 14:04:00 by keomalima        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ typedef struct s_cmd
 
 typedef struct s_filed
 {
+	char	*limiter;
+	int		is_here_doc;
 	int		fd_in;
 	int		fd_out;
 	int		ac;
@@ -48,6 +50,8 @@ typedef struct s_filed
 }				t_filed;
 
 int		parse_prog_args(t_filed *file, int ac, char **av, char **env);
+void	pipex_here_doc(t_filed *file);
+void	ft_dup2(t_filed *file, int old_fd, int new_fd);
 void	access_check(t_filed *file, char **av, int ac);
 void	free_split(char **arr);
 void	exit_handler(const char *err_msg);

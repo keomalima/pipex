@@ -6,11 +6,20 @@
 /*   By: keomalima <keomalima@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 11:32:45 by keomalima         #+#    #+#             */
-/*   Updated: 2024/12/30 13:38:37 by keomalima        ###   ########.fr       */
+/*   Updated: 2024/12/31 12:11:03 by keomalima        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+void	exit_handler(const char *err_msg)
+{
+	if (errno != 0)
+		ft_printf("%s: %s\n", strerror(errno), err_msg);
+	else
+		ft_printf("%s\n", err_msg);
+	exit(EXIT_FAILURE);
+}
 
 void	wait_for_children(t_filed *file, int num_children)
 {
