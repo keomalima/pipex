@@ -6,7 +6,7 @@
 /*   By: keomalima <keomalima@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/22 11:27:52 by keomalima         #+#    #+#             */
-/*   Updated: 2024/12/31 11:38:28 by keomalima        ###   ########.fr       */
+/*   Updated: 2024/12/31 16:29:45 by keomalima        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ int	parse_prog_args(t_filed *file, int ac, char **av, char **env)
 	if (!file->cmds)
 		exit_handler("Failed to parse cmds");
 	i = 0;
-	while (ac - 3  - bonus_var > i)
+	while (ac - 3 - bonus_var > i)
 	{
 		file->cmds[i] = parse_cmd_args(file, av[i + 2 + bonus_var]);
 		if (!file->cmds[i])

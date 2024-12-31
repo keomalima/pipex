@@ -6,7 +6,7 @@
 /*   By: keomalima <keomalima@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/22 21:03:03 by keomalima         #+#    #+#             */
-/*   Updated: 2024/12/31 13:49:55 by keomalima        ###   ########.fr       */
+/*   Updated: 2024/12/31 15:54:55 by keomalima        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,10 @@ void	swap_pipes_fd(t_filed *file, int i)
 	if (i == 0)
 	{
 		ft_dup2(file, file->fd_in, STDIN_FILENO);
-		ft_dup2(file, file->pipe_fd[i][1], STDOUT_FILENO);
+		if (file->is_here_doc && file->ac == 1)
+			ft_dup2(file, file->fd_out, STDOUT_FILENO);
+		else
+			ft_dup2(file, file->pipe_fd[i][1], STDOUT_FILENO);
 	}
 	else if (i == file->ac - 1)
 	{
@@ -45,6 +48,7 @@ void	pipex_run_pipes(t_filed *file, char **env)
 	if (!file->pid)
 		clean_memory_and_exit(file, "failed to allocate memory to pid");
 	malloc_n_open_pipes_fd(file);
+	pipex_here_doc(file);
 	i = 0;
 	while (file->ac > i)
 	{

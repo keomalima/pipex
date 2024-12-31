@@ -6,7 +6,7 @@
 /*   By: keomalima <keomalima@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 11:32:45 by keomalima         #+#    #+#             */
-/*   Updated: 2024/12/31 12:11:03 by keomalima        ###   ########.fr       */
+/*   Updated: 2024/12/31 16:30:11 by keomalima        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ void	malloc_n_open_pipes_fd(t_filed *file)
 	int	i;
 
 	i = 0;
-	file->pipe_fd = NULL;
 	file->pipe_fd = malloc(sizeof(int *) * (file->ac - 1));
 	if (!file->pipe_fd)
 		clean_memory_and_exit(file, "failed to allocate memory to fd column");
@@ -87,4 +86,3 @@ void	malloc_n_open_pipes_fd(t_filed *file)
 		i++;
 	}
 }
-

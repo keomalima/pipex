@@ -6,7 +6,7 @@
 /*   By: keomalima <keomalima@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 09:38:58 by keomalima         #+#    #+#             */
-/*   Updated: 2024/12/31 11:24:28 by keomalima        ###   ########.fr       */
+/*   Updated: 2024/12/31 16:30:39 by keomalima        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ void	access_check(t_filed *file, char **av, int ac)
 {
 	if (ft_strncmp(av[1], "here_doc", 8) == 0)
 	{
-		file->fd_in = dup(STDIN_FILENO);
 		file->is_here_doc = 1;
 		file->limiter = av[2];
 	}
@@ -69,7 +68,7 @@ void	access_check(t_filed *file, char **av, int ac)
 		file->limiter = NULL;
 	}
 	if (file->fd_in < 0)
-			exit_handler(av[1]);
+		exit_handler(av[1]);
 	file->fd_out = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (file->fd_out < 0)
 	{
